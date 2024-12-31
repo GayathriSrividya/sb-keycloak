@@ -40,6 +40,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/keycloak:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/keycloak:${{ steps.tag.outputs.TAG }}
