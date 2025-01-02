@@ -1,20 +1,28 @@
-# Use Ubuntu base image
-FROM ubuntu:22.04
+# Use Keycloak base image
+FROM quay.io/keycloak/keycloak:21.1.2 as builder
 
-# Install OpenJDK (required for Keycloak)
-RUN apt-get update && apt-get install -y openjdk-17-jdk
+# Build Keycloak with custom providers
+ENV KC_DB=postgres
+ENV KC_FEATURES=token-exchange
+ENV KC_HEALTH_ENABLED=true
+ENV KC_METRICS_ENABLED=true
 
-# Create directory for mounting
-RUN mkdir -p /opt/keycloak
+# Create final image
+FROM quay.io/keycloak/keycloak:21.1.2
+COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
-# Copy Keycloak files
-COPY keycloak-21.1.2/ /opt/keycloak/
+# Copy your custom Keycloak configuration
+COPY keycloak-21.1.2/conf/ /opt/keycloak/conf/
+COPY keycloak-21.1.2/providers/ /opt/keycloak/providers/
+COPY keycloak-21.1.2/themes/ /opt/keycloak/themes/
+
+# Set permissions
+USER root
+RUN chown -R keycloak:keycloak /opt/keycloak
+USER keycloak
 
 # Expose the default Keycloak port
 EXPOSE 8080
 
-# Set working directory
 WORKDIR /opt/keycloak
-
-# Start Keycloak in development mode
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
