@@ -21,6 +21,9 @@ USER root
 RUN chown -R keycloak:keycloak /opt/keycloak
 USER keycloak
 
+# Build with dependencies
+RUN /opt/keycloak/bin/kc.sh build
+
 # Expose the default Keycloak port
 EXPOSE 8080
 
