@@ -32,7 +32,6 @@ dist/
 build/
 target/
 *.class
-*.jar
 
 # Logs
 *.log
