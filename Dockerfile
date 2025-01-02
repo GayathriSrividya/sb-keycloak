@@ -12,6 +12,7 @@ ENV KC_FEATURES=token-exchange
 ENV KC_HTTP_RELATIVE_PATH=/auth
 ENV KEYCLOAK_ADMIN=admin
 ENV KEYCLOAK_ADMIN_PASSWORD=admin
+ENV JAVA_OPTS_APPEND="--add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/sun.security.x509=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/jdk.internal.reflect=ALL-UNNAMED --add-opens=java.base/jdk.internal.misc=ALL-UNNAMED"
 
 # Create necessary directories
 USER root
