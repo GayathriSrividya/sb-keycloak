@@ -14,4 +14,4 @@ EXPOSE 8080
 WORKDIR /opt/keycloak
 
 # Start Keycloak in development mode
-ENTRYPOINT ["./bin/kc.sh", "start-dev"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
