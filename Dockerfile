@@ -24,8 +24,12 @@ USER root
 RUN chown -R keycloak:keycloak /opt/keycloak
 USER keycloak
 
+# Import realm, build, and prepare start command
+RUN /opt/keycloak/bin/kc.sh --verbose import --file /opt/keycloak/imports/sunbird-realm.json && \
+    /opt/keycloak/bin/kc.sh build
+
 # Expose the default Keycloak port
 EXPOSE 8080
 
 WORKDIR /opt/keycloak
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev", "--spi", "connections-jpa-legacy-migration-strategy=update"]
