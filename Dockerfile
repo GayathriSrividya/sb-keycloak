@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y openjdk-17-jdk
 # Create directory for mounting
 RUN mkdir -p /opt/keycloak
 
+# Copy Keycloak files
+COPY keycloak-21.1.2/ /opt/keycloak/
+
 # Expose the default Keycloak port
 EXPOSE 8080
 
