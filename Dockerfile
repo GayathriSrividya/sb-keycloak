@@ -3,6 +3,9 @@ FROM quay.io/keycloak/keycloak:21.1.2 as builder
 
 # Build Keycloak with custom providers
 ENV KC_DB=postgres
+ENV KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/postgres
+ENV KC_DB_USERNAME=postgres
+ENV KC_DB_PASSWORD=postgres
 ENV KC_FEATURES=token-exchange
 ENV KC_HEALTH_ENABLED=true
 ENV KC_METRICS_ENABLED=true
