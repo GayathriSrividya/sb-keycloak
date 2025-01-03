@@ -8,7 +8,7 @@ ENV KC_DB=postgres
 # ENV KC_METRICS_ENABLED=true
 
 # Build optimized version
-RUN /opt/keycloak/bin/kc.sh build --verbose  
+# RUN /opt/keycloak/bin/kc.sh build --verbose  
 
 # Create final image
 FROM quay.io/keycloak/keycloak:26.0
