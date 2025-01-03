@@ -8,7 +8,7 @@ ENV KC_HEALTH_ENABLED=true
 ENV KC_METRICS_ENABLED=true
 
 # Build optimized version
-RUN /opt/keycloak/bin/kc.sh build --db=postgres --health-enabled=true --metrics-enabled=true --features=token-exchange
+RUN /opt/keycloak/bin/kc.sh build --verbose --db=postgres --health-enabled=true --metrics-enabled=true --features=token-exchange
 
 # Create final image
 FROM quay.io/keycloak/keycloak:26.0
