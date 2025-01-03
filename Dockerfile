@@ -1,5 +1,5 @@
 # Use Keycloak base image
-FROM quay.io/keycloak/keycloak:21.1.2 AS builder
+FROM quay.io/keycloak/keycloak:26.0 AS builder
 
 # Build Keycloak with custom providers
 ENV KC_DB=postgres
@@ -11,13 +11,13 @@ ENV KC_HEALTH_ENABLED=true
 ENV KC_METRICS_ENABLED=true
 
 # Create final image
-FROM quay.io/keycloak/keycloak:21.1.2
+FROM quay.io/keycloak/keycloak:26.0
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
 # Copy your custom Keycloak configuration
 COPY keycloak-21.1.2/conf/ /opt/keycloak/conf/
 COPY keycloak-21.1.2/providers/ /opt/keycloak/providers/
-# COPY keycloak-21.1.2/themes/ /opt/keycloak/themes/
+COPY keycloak-21.1.2/themes/ /opt/keycloak/themes/
 COPY keycloak-21.1.2/imports/ /opt/keycloak/imports/
 
 # Set permissions
