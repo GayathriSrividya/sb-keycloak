@@ -31,4 +31,4 @@ WORKDIR /opt/keycloak
 
 # Start with import and migration strategy
 CMD /opt/keycloak/bin/kc.sh --verbose import --file /opt/keycloak/imports/sunbird-realm.json && \
-    /opt/keycloak/bin/kc.sh start-dev --spi connections-jpa-legacy-migration-strategy=update --proxy edge --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --quarkus.transaction-manager.enable-recovery=true
+    /opt/keycloak/bin/kc.sh start-dev --spi connections-jpa-legacy-migration-strategy=update --proxy edge --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true 
