@@ -12,7 +12,7 @@ COPY --from=builder /opt/keycloak/ /opt/keycloak/
 # Copy your custom Keycloak configuration
 COPY keycloak-21.1.2/conf/ /opt/keycloak/conf/
 COPY keycloak-21.1.2/providers/ /opt/keycloak/providers/
-COPY keycloak-21.1.2/themes/ /opt/keycloak/themes/
+# COPY keycloak-21.1.2/themes/ /opt/keycloak/themes/
 COPY keycloak-21.1.2/imports/ /opt/keycloak/imports/
 
 # Set permissions
