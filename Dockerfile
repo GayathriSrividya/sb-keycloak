@@ -20,6 +20,13 @@ USER root
 RUN chown -R keycloak:keycloak /opt/keycloak
 USER keycloak
 
+# Set environment variables for proper configuration
+ENV KC_PROXY=edge
+ENV KC_HOSTNAME_STRICT=false
+ENV KC_HOSTNAME_STRICT_HTTPS=false
+ENV KC_HTTP_RELATIVE_PATH=/auth
+ENV KC_SPI_LOGIN_PROTOCOL_OPENID_CONNECT_LEGACY_LOGOUT_REDIRECT_URI=true
+
 # Build first
 RUN /opt/keycloak/bin/kc.sh build
 
@@ -28,6 +35,6 @@ EXPOSE 8080
 
 WORKDIR /opt/keycloak
 
-# Start with import and migration strategy
-CMD /opt/keycloak/bin/kc.sh --verbose import --file /opt/keycloak/imports/sunbird-realm.json && \
-    /opt/keycloak/bin/kc.sh start-dev --spi connections-jpa-legacy-migration-strategy=update --proxy edge --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true 
+# Start Keycloak with proper configuration
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+CMD ["start", "--optimized", "--import-realm", "--spi-connections-jpa-legacy-migration-strategy=update"]
