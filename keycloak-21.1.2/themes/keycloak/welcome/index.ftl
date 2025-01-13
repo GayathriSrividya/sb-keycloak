@@ -20,10 +20,10 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
- 
+ 
 <html>
 <head>
-    <title>Welcome to ${productNameFull}</title>
+    <title>Welcome to ${productNameFull!"Sunbird"}</title>
 
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -43,8 +43,8 @@
   <div class="row">
     <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
       <div class="welcome-header">
-        <img src="${resourcesPath}/logo.png" alt="${productName}" border="0" />
-        <h1>Welcome to <strong>${productNameFull}</strong></h1>
+        <img src="${resourcesPath}/logo.png" alt="${productName!"Sunbird"}" border="0" />
+        <h1>Welcome to <strong>${productNameFull!"Sunbird"}</strong></h1>
       </div>
       <div class="row">
         <div class="col-xs-12 col-sm-4">
@@ -91,7 +91,7 @@
             <div class="welcome-primary-link">
               <h3><a href="admin/"><img src="welcome-content/user.png">Administration Console <i class="fa fa-angle-right link" aria-hidden="true"></i></a></h3>
               <div class="description">
-                Centrally manage all aspects of the ${productNameFull} server
+                Centrally manage all aspects of the ${productNameFull!"Sunbird"} server
               </div>
             </div>
           </div>
