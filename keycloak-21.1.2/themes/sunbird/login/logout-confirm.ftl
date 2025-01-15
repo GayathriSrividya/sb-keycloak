@@ -1,19 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirm Logout</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        button { padding: 10px 20px; margin: 5px; }
-    </style>
-</head>
-<body>
-    <h1>Are you sure you want to log out?</h1>
-    <form method="post" action="${url.logoutConfirmAction}">
-        <input type="hidden" name="session_code" value="${session_code}" />
-        <button type="submit" name="confirmLogout">Confirm</button>
-        <button type="button" onclick="window.history.back();">Cancel</button>
-    </form>
-</body>
-</html>
+<script type="text/javascript">
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Get the redirect URI and client ID from query parameters
+    const redirectUri = getQueryParam('redirect_uri');
+    const clientId = getQueryParam('client_id') || 'account'; // Default to 'account' if client_id is not provided
+
+    // Construct the logout URL
+    if (redirectUri) {
+        const logoutUrl = `/auth/realms/sunbird/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${encodeURIComponent(redirectUri)}`;
+        // Redirect to the logout URL
+        window.location.href = logoutUrl;
+    } else {
+        console.error('Redirect URI not provided');
+    }
+</script>
