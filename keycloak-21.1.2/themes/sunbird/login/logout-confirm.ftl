@@ -1,36 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Logout Confirmation</title>
-</head>
-<body>
-    <h1>Logout Confirmation</h1>
-    <div id="log-output"></div>
+<script type="text/javascript">
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
 
-    <script type="text/javascript">
-        // Function to get query parameter by name
-        function getQueryParam(name) {
-            let urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
+    // Function to add query parameters to a URL
+    function addQueryParam(url, key, value) {
+        const urlObj = new URL(url, window.location.origin);
+        if (!urlObj.searchParams.has(key)) {
+            urlObj.searchParams.set(key, value);
         }
+        return urlObj.toString();
+    }
 
-        // Get the redirect URI from query parameters
-        let redirectUri = getQueryParam('redirect_uri');
+    // Get redirect_uri and client_id from query parameters
+    const redirectUri = getQueryParam('redirect_uri');
+    let clientId = getQueryParam('client_id') || 'defaultClientId'; // Fallback to default if client_id is missing
 
-        // Define the host for logout
-        const host = window.location.origin; 
+    // Construct logout URL
+    let logoutUrl = `${window.location.origin}/auth/realms/sunbird/protocol/openid-connect/logout`;
 
-        // Redirect to the dynamic URI if it exists
-        if (redirectUri) {
-            const logoutUrl = `${host}/auth/realms/sunbird/protocol/openid-connect/logout?client_id=account&redirect_uri=${redirectUri}`;
-            document.getElementById('log-output').innerHTML = '<p>Logout URL: ' + logoutUrl + '</p>';
-            // Redirect to the logout URL
-            window.location.href = logoutUrl;
-        } else {
-            // Optionally handle the case where redirect_uri is not provided
-            document.getElementById('log-output').innerHTML = '<p style="color:red;">Redirect URI not provided</p>';
-        }
-    </script>
-</body>
-</html>
+    if (redirectUri) {
+        logoutUrl = addQueryParam(logoutUrl, 'client_id', clientId);
+        logoutUrl = addQueryParam(logoutUrl, 'redirect_uri', redirectUri);
+        window.location.href = logoutUrl; // Redirect to the constructed logout URL
+    } else {
+        console.error('Redirect URI not provided');
+    }
+</script>
