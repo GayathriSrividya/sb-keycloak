@@ -4,11 +4,12 @@
 <script type="text/javascript">
     // Function to get query parameter by name
     function getQueryParams() {
-        const urlParams = new URLSearchParams(window.location.search);
+        let urlParams = new URLSearchParams(window.location.search);
         console.log({urlParams}, urlParams.toString());
         if (!urlParams.has('client_id')) {
             urlParams.set('client_id', ${clientId});
         }           
+        console.log({urlParams}, urlParams.toString());
         return urlParams.toString();
     }
 
