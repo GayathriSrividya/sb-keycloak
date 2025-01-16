@@ -1,28 +1,16 @@
-<#-- Default value for client_id -->
-<#assign clientId = ${sunbird_portal_client_id!"portal_client"}>
-
 <script type="text/javascript">
-    // Function to get query parameters and ensure client_id is set
+    // Function to get query parameter by name
     function getQueryParams() {
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Log the initial query parameters
-        console.log('Initial Query Parameters:', urlParams.toString());
-
-        // Check if client_id exists, if not, set it
+        let urlParams = new URLSearchParams(window.location.search);
+        console.log({urlParams}, urlParams.toString());
         if (!urlParams.has('client_id')) {
-            urlParams.set('client_id', "${clientId}");
-            console.log('client_id was not present, setting to:', "${clientId}");
-        } else {
-            console.log('client_id exists:', urlParams.get('client_id'));
-        }
-
-        // Log the final query parameters
-        console.log('Final Query Parameters:', urlParams.toString());
-
+            urlParams.set('client_id', portal);
+        }           
+        console.log({urlParams}, urlParams.toString());
         return urlParams.toString();
     }
 
+ 
     // Use JavaScript to get the host
     const host = window.location.origin;
 
