@@ -1,5 +1,5 @@
 <#-- Default value for client_id -->
-<#assign clientId = sunbird_portal_client_id!"portal_client">
+<#assign clientId = ${sunbird_portal_client_id!"portal_client"}>
 
 <script type="text/javascript">
     // Function to get query parameters and ensure client_id is set
