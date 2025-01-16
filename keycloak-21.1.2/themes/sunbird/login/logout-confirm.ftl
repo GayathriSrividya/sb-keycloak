@@ -1,6 +1,6 @@
 <#-- Check if client_id and redirect_uri are provided -->
 <#assign clientId = client_id!"account">
-<#assign redirectUri = redirect_uri!"https://cossdev.sunbirded.org">
+<#assign redirectUri = redirect_uri!"https%3A%2F%2Fcossdev.sunbirded.org%2F">
 
 <script type="text/javascript">
     // Function to add query parameters to a URL
@@ -20,7 +20,7 @@
     const host = window.location.origin;
 
     // Construct logout URL
-    let logoutUrl = `${host}/auth/realms/sunbird/protocol/openid-connect/logout`;
+    let logoutUrl = host + `/auth/realms/sunbird/protocol/openid-connect/logout`;
 
     if (redirectUri) {
         // Add client_id and redirect_uri as query parameters
