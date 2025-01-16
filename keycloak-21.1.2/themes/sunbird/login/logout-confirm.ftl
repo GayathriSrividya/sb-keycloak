@@ -5,6 +5,7 @@
     // Function to get query parameter by name
     function getQueryParams() {
         const urlParams = new URLSearchParams(window.location.search);
+        console.log({urlParams});
         if (!urlParams.has('client_id')) {
             urlParams.set('client_id', ${clientId});
         }           
