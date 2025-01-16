@@ -68,16 +68,7 @@ export class KeycloakService {
     }
 
     public logout(redirectUri?: string): void {
-        console.log("entering logout");
-        const urlParams = new URLSearchParams(window.location.search);
-        let clientId = urlParams.get('client_id') || 'account'; // Fallback to 'account' if client_id is missing
-        
-        const logoutOptions = {
-            redirectUri: redirectUri,
-            clientId: clientId
-        };
-        
-        KeycloakService.keycloakAuth.logout(logoutOptions);
+        KeycloakService.keycloakAuth.logout({redirectUri: redirectUri});
     }
 
     public account(): void {
