@@ -3,9 +3,8 @@
     function getQueryParams() {
         let urlParams = new URLSearchParams(window.location.search);
         console.log({urlParams}, urlParams.toString());
-        console.log("${sunbird_portal_client_id}")
         if (!urlParams.has('client_id')) {
-            urlParams.set('client_id', "${sunbird_portal_client_id!'portal'}");
+            urlParams.set('client_id', 'portal');
         }           
         console.log({urlParams}, urlParams.toString());
         return urlParams.toString();
