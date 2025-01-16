@@ -34,7 +34,7 @@
         output += '<p>Redirect URI: ' + redirectUri + '</p>';
 
         if (redirectUri) {
-            const logoutUrl = `/auth/realms/sunbird/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${encodeURIComponent(redirectUri)}`;
+            const logoutUrl = `/auth/realms/sunbird/protocol/openid-connect/logout?client_id=account&post_logout_redirect_uri=${encodeURIComponent(redirectUri)}`;
             output += '<p>Logout URL: ' + logoutUrl + '</p>';
             // Redirect to the logout URL
             window.location.href = logoutUrl;
