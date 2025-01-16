@@ -17,7 +17,9 @@
     // Construct logout URL
     let logoutUrl = host + `/auth/realms/sunbird/protocol/openid-connect/logout`;
     logoutUrl += '?' + getQueryParams();
-    
+    console.log({logoutUrl});
     // Redirect to the constructed logout URL
-    window.location.href = logoutUrl;
+    if (window.location.href !== logoutUrl) {
+        window.location.replace(logoutUrl);
+    }
 </script>
