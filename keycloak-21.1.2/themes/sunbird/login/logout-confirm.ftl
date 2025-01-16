@@ -1,23 +1,29 @@
-// Function to get query parameter by name
-function getQueryParam(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
+<script type="text/javascript">
+    // Function to get query parameters as an object
+    function getQueryParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const params = {};
+        for (const [key, value] of urlParams.entries()) {
+            params[key] = value;
+        }
+        return params;
+    }
 
-// Get the redirect URI and client ID from query parameters
-const redirectUri = getQueryParam('redirect_uri');
-let clientId = getQueryParam('client_id');
+    // Get all query parameters
+    const queryParams = getQueryParams();
 
-// Default to 'account' if client_id is not provided or is empty
-if (!clientId) {
-    clientId = 'account';
-}
+    // Determine client_id from query parameters, default to 'account' if not present
+    const clientId = queryParams['client_id'] || 'account';
 
-// Construct the logout URL
-if (redirectUri) {
-    const logoutUrl = `/auth/realms/sunbird/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${encodeURIComponent(redirectUri)}`;
-    // Redirect to the logout URL
-    window.location.href = logoutUrl;
-} else {
-    console.error('Redirect URI not provided');
-}
+    // Get the redirect URI from query parameters
+    const redirectUri = queryParams['redirect_uri'];
+
+    // Construct the logout URL
+    if (redirectUri) {
+        const logoutUrl = `/auth/realms/sunbird/protocol/openid-connect/logout?client_id=${clientId}&post_logout_redirect_uri=${encodeURIComponent(redirectUri)}`;
+        // Redirect to the logout URL
+        window.location.href = logoutUrl;
+    } else {
+        console.error('Redirect URI not provided');
+    }
+</script>
