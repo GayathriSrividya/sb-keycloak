@@ -1,6 +1,6 @@
 <#-- Check if client_id and redirect_uri are provided -->
 <#assign clientId = client_id!"account">
-<#assign redirectUri = redirect_uri!"https://cossdev.sunbirded.org">
+<#assign redirectUri = redirect_uri!"https://cossdev.sunbirded.org/">
 
 <script type="text/javascript">
     // Function to add query parameters to a URL
