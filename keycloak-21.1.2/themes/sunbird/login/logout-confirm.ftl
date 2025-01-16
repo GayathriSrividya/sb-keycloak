@@ -1,6 +1,6 @@
 <#-- Default values for client_id and redirect_uri -->
-<#assign clientId = client_id!"portal">
-<#assign redirectUri = redirect_uri!"https://cossdev.sunbirded.org/">
+<#assign clientId = sunbird_portal_client_id!"portal">
+<#assign redirectUri = sunbird_domain!"https://cossdev.sunbirded.org/">
 
 <script type="text/javascript">
     // Function to get query parameter by name
