@@ -1,22 +1,19 @@
-<#-- Check if client_id and redirect_uri are provided -->
+<#-- Default values for client_id and redirect_uri -->
 <#assign clientId = client_id!"portal">
 <#assign redirectUri = redirect_uri!"https://cossdev.sunbirded.org/">
 
 <script type="text/javascript">
-    // Function to add query parameters to a URL
-    function addQueryParam(url, key, value) {
-        const urlObj = new URL(url, window.location.origin);
-        if (!urlObj.searchParams.has(key)) {
-            urlObj.searchParams.set(key, value);
-        }
-        return urlObj.toString();
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
     }
 
-    // Get redirect_uri and client_id from FreeMarker
-    const redirectUri = "${redirectUri}";
-    const clientId = "${clientId}";
+    // Get redirect_uri and client_id from query parameters
+    const redirectUri = getQueryParam('redirect_uri') || "${redirectUri}";
+    const clientId = getQueryParam('client_id') || "${clientId}";
 
-    // Dynamically construct the host
+    // Use JavaScript to get the host
     const host = window.location.origin;
 
     // Construct logout URL
@@ -24,8 +21,7 @@
 
     if (redirectUri) {
         // Add client_id and redirect_uri as query parameters
-        logoutUrl = addQueryParam(logoutUrl, 'client_id', clientId);
-        logoutUrl = addQueryParam(logoutUrl, 'redirect_uri', redirectUri);
+        logoutUrl += `?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
     } else {
         console.error('Redirect URI not provided');
     }
