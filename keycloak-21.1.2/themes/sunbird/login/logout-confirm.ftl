@@ -28,7 +28,7 @@
 
     // Redirect to the logout URL if redirection is required
     if (queryParams) {
-        const logoutUrl = `${host}/auth/realms/sunbird/protocol/openid-connect/logout?${queryParams}`;
+        const logoutUrl = host + `/auth/realms/sunbird/protocol/openid-connect/logout?${queryParams}`;
         console.log("Redirecting to logout URL:", logoutUrl);
 
         // Trigger the redirection
