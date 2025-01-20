@@ -4,7 +4,33 @@
         ${msg("logoutConfirmTitle")}
     <#elseif section = "form">
         <div id="kc-logout-confirm" class="content-area">
-            <p class="instruction">${msg("logoutConfirmHeader")}</p>
+            <style>
+                .logout-message {
+                    text-align: center;
+                    font-size: 1.5em;
+                    margin: 20px 0;
+                    padding: 15px;
+                    color: #333;
+                    font-weight: bold;
+                }
+                .logout-spinner {
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border: 3px solid #f3f3f3;
+                    border-top: 3px solid #3498db;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    margin-left: 10px;
+                }
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
+            <div class="logout-message">
+                Logging you out securely<span class="logout-spinner"></span>
+            </div>
 
             <script>
             function clearAllCookies() {
