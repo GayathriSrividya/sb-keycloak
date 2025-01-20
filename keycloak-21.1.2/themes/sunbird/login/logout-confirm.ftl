@@ -7,17 +7,50 @@
             <p class="instruction">${msg("logoutConfirmHeader")}</p>
 
             <script>
+            function clearAllCookies() {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i];
+                    const eqPos = cookie.indexOf('=');
+                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+                    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/auth/realms/sunbird';
+                }
+            }
+
+            function clearStorage() {
+                localStorage.clear();
+                sessionStorage.clear();
+            }
+
             async function keycloakLogout() {
                 try {
-                    const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout?client_id=portal&redirect_uri=https%3A%2F%2Fcossdev.sunbirded.org%2F';
+                    const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout';
+                    const sessionCode = '${logoutConfirm.code}';
+                    const idToken = localStorage.getItem('kc_idToken') || '';
                     
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 10000);
                     
+                    const params = new URLSearchParams({
+                        'post_logout_redirect_uri': 'https://cossdev.sunbirded.org/',
+                        'client_id': 'portal',
+                        'session_code': sessionCode
+                    });
+
+                    // Add id_token_hint if available
+                    if (idToken) {
+                        params.append('id_token_hint', idToken);
+                    }
+                    
                     const response = await fetch(logoutUrl, {
-                        method: 'GET',
-                        signal: controller.signal,
-                        credentials: 'include'
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: params,
+                        credentials: 'include',
+                        signal: controller.signal
                     });
                     
                     clearTimeout(timeoutId);
@@ -25,13 +58,20 @@
                     if (!response.ok) {
                         throw new Error('Logout failed with status: ' + response.status);
                     }
+
+                    // Clear all tokens and storage
+                    clearAllCookies();
+                    clearStorage();
                     
-                    // Redirect to the main page after successful logout
-                    window.location.href = 'https://cossdev.sunbirded.org/';
+                    // Use the response URL for redirect if available, otherwise fallback to default
+                    const redirectUrl = response.url || 'https://cossdev.sunbirded.org/';
+                    window.location.href = redirectUrl;
                     
                 } catch (error) {
                     console.error('Logout error:', error.toString());
-                    // Still redirect even if there's an error
+                    // Still try to clear everything and redirect
+                    clearAllCookies();
+                    clearStorage();
                     window.location.href = 'https://cossdev.sunbirded.org/';
                 }
             }
