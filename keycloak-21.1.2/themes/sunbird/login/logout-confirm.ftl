@@ -33,6 +33,9 @@
             </div>
 
             <script>
+            // Flag to prevent multiple executions
+            let isLoggingOut = false;
+
             function clearAllCookies() {
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
@@ -50,13 +53,22 @@
             }
 
             async function keycloakLogout() {
+                // Prevent multiple calls
+                if (isLoggingOut) {
+                    return;
+                }
+                isLoggingOut = true;
+
                 try {
                     const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout';
                     const sessionCode = '${logoutConfirm.code}';
                     const idToken = localStorage.getItem('kc_idToken') || '';
                     
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 10000);
+                    const timeoutId = setTimeout(() => {
+                        controller.abort();
+                        isLoggingOut = false;  // Reset flag on timeout
+                    }, 10000);
                     
                     const params = new URLSearchParams({
                         'post_logout_redirect_uri': 'https://cossdev.sunbirded.org/',
@@ -88,23 +100,29 @@
                     // Clear all tokens and storage
                     clearAllCookies();
                     clearStorage();
+
+                    // Store a flag in sessionStorage to prevent re-execution after redirect
+                    sessionStorage.setItem('logout_in_progress', 'true');
                     
                     // Use the response URL for redirect if available, otherwise fallback to default
                     const redirectUrl = response.url || 'https://cossdev.sunbirded.org/';
-                    window.location.href = redirectUrl;
+                    window.location.replace(redirectUrl);  // Using replace instead of href
                     
                 } catch (error) {
                     console.error('Logout error:', error.toString());
                     // Still try to clear everything and redirect
                     clearAllCookies();
                     clearStorage();
-                    window.location.href = 'https://cossdev.sunbirded.org/';
+                    sessionStorage.setItem('logout_in_progress', 'true');
+                    window.location.replace('https://cossdev.sunbirded.org/');
                 }
             }
 
-            // Call logout immediately when the page loads
+            // Call logout only if not already in progress
             document.addEventListener('DOMContentLoaded', function() {
-                keycloakLogout();
+                if (sessionStorage.getItem('logout_in_progress') !== 'true') {
+                    keycloakLogout();
+                }
             });
             </script>
 
