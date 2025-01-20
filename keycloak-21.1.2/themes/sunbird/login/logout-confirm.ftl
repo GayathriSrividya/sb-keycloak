@@ -39,7 +39,7 @@
                     clearTimeout(timeoutId);
                     
                     if (!response.ok) {
-                        throw new Error(`Logout failed with status: ${response.status}`);
+                        throw new Error('Logout failed with status: ' + response.status);
                     }
                     
                     return { success: true, message: 'Logout successful' };
@@ -48,7 +48,7 @@
                     if (error.name === 'AbortError') {
                         return { success: false, message: 'Logout request timed out' };
                     }
-                    return { success: false, message: error.message };
+                    return { success: false, message: error.toString() };
                 }
             }
 
