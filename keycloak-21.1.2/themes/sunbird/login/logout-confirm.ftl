@@ -6,34 +6,18 @@
         <div id="kc-logout-confirm" class="content-area">
             <p class="instruction">${msg("logoutConfirmHeader")}</p>
 
-            <form class="form-actions" id="logoutForm" onsubmit="handleLogout(event)">
-                <input type="hidden" name="session_code" value="${logoutConfirm.code}">
-                <div class="${properties.kcFormGroupClass!}">
-                    <div id="kc-form-options">
-                        <div class="${properties.kcFormOptionsWrapperClass!}">
-                        </div>
-                    </div>
-
-                    <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
-                        <input tabindex="4"
-                               class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}"
-                               name="confirmLogout" id="kc-logout" type="submit" value="${msg("doLogout")}"/>
-                    </div>
-                </div>
-            </form>
-
             <script>
             async function keycloakLogout() {
                 try {
                     const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout?client_id=portal&redirect_uri=https%3A%2F%2Fcossdev.sunbirded.org%2F';
                     
-                    // Set a timeout of 10 seconds to prevent hanging
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 10000);
                     
                     const response = await fetch(logoutUrl, {
                         method: 'GET',
-                        signal: controller.signal
+                        signal: controller.signal,
+                        credentials: 'include'
                     });
                     
                     clearTimeout(timeoutId);
@@ -42,35 +26,20 @@
                         throw new Error('Logout failed with status: ' + response.status);
                     }
                     
-                    return { success: true, message: 'Logout successful' };
+                    // Redirect to the main page after successful logout
+                    window.location.href = 'https://cossdev.sunbirded.org/';
                     
                 } catch (error) {
-                    if (error.name === 'AbortError') {
-                        return { success: false, message: 'Logout request timed out' };
-                    }
-                    return { success: false, message: error.toString() };
+                    console.error('Logout error:', error.toString());
+                    // Still redirect even if there's an error
+                    window.location.href = 'https://cossdev.sunbirded.org/';
                 }
             }
 
-            async function handleLogout(event) {
-                event.preventDefault();
-                const logoutButton = document.getElementById('kc-logout');
-                logoutButton.disabled = true;
-                
-                try {
-                    const result = await keycloakLogout();
-                    if (result.success) {
-                        // Submit the original form after successful API call
-                        document.getElementById('logoutForm').submit();
-                    } else {
-                        alert(result.message);
-                        logoutButton.disabled = false;
-                    }
-                } catch (error) {
-                    alert('An error occurred during logout');
-                    logoutButton.disabled = false;
-                }
-            }
+            // Call logout immediately when the page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                keycloakLogout();
+            });
             </script>
 
             <div id="kc-info-message">
