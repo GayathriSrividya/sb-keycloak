@@ -35,16 +35,6 @@
             <script>
             console.log('Script started');
 
-            // Check if we're already in the process of logging out
-            if (sessionStorage.getItem('logout_attempted')) {
-                console.log('Logout already attempted, redirecting to home');
-                window.location.replace('https://cossdev.sunbirded.org/');
-                throw new Error('Preventing infinite logout loop');
-            }
-
-            // Set the flag immediately
-            sessionStorage.setItem('logout_attempted', 'true');
-
             function clearAllCookies() {
                 const cookies = document.cookie.split(';');
                 for (let i = 0; i < cookies.length; i++) {
@@ -57,17 +47,21 @@
             }
 
             function clearStorage() {
-                // Keep the logout_attempted flag
-                const logoutAttempted = sessionStorage.getItem('logout_attempted');
                 localStorage.clear();
                 sessionStorage.clear();
-                if (logoutAttempted) {
-                    sessionStorage.setItem('logout_attempted', logoutAttempted);
-                }
             }
 
+            let logoutAttempted = false;
+
             async function keycloakLogout() {
-                console.log('Logout function called');
+                if (logoutAttempted) {
+                    console.log('Logout already in progress');
+                    return;
+                }
+
+                logoutAttempted = true;
+                console.log('Starting logout process');
+
                 try {
                     const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout';
                     const sessionCode = '${logoutConfirm.code}';
@@ -98,7 +92,7 @@
                     clearAllCookies();
                     clearStorage();
                     
-                    console.log('Redirecting to homepage');
+                    console.log('Logout successful, redirecting');
                     window.location.replace('https://cossdev.sunbirded.org/');
                     
                 } catch (error) {
