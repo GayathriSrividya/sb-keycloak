@@ -33,8 +33,17 @@
             </div>
 
             <script>
-            // Flag to prevent multiple executions
-            let isLoggingOut = false;
+            console.log('Script started');
+
+            // Check if we're already in the process of logging out
+            if (sessionStorage.getItem('logout_attempted')) {
+                console.log('Logout already attempted, redirecting to home');
+                window.location.replace('https://cossdev.sunbirded.org/');
+                throw new Error('Preventing infinite logout loop');
+            }
+
+            // Set the flag immediately
+            sessionStorage.setItem('logout_attempted', 'true');
 
             function clearAllCookies() {
                 const cookies = document.cookie.split(';');
@@ -48,27 +57,21 @@
             }
 
             function clearStorage() {
+                // Keep the logout_attempted flag
+                const logoutAttempted = sessionStorage.getItem('logout_attempted');
                 localStorage.clear();
                 sessionStorage.clear();
+                if (logoutAttempted) {
+                    sessionStorage.setItem('logout_attempted', logoutAttempted);
+                }
             }
 
             async function keycloakLogout() {
-                // Prevent multiple calls
-                if (isLoggingOut) {
-                    return;
-                }
-                isLoggingOut = true;
-
+                console.log('Logout function called');
                 try {
                     const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout';
                     const sessionCode = '${logoutConfirm.code}';
-                    const idToken = localStorage.getItem('kc_idToken') || '';
-                    
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => {
-                        controller.abort();
-                        isLoggingOut = false;  // Reset flag on timeout
-                    }, 10000);
+                    console.log('Session code:', sessionCode);
                     
                     const params = new URLSearchParams({
                         'post_logout_redirect_uri': 'https://cossdev.sunbirded.org/',
@@ -76,54 +79,38 @@
                         'session_code': sessionCode
                     });
 
-                    // Add id_token_hint if available
-                    if (idToken) {
-                        params.append('id_token_hint', idToken);
-                    }
-                    
+                    console.log('Making logout request to:', logoutUrl);
                     const response = await fetch(logoutUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
                         },
                         body: params,
-                        credentials: 'include',
-                        signal: controller.signal
+                        credentials: 'include'
                     });
                     
-                    clearTimeout(timeoutId);
+                    console.log('Logout response status:', response.status);
                     
                     if (!response.ok) {
                         throw new Error('Logout failed with status: ' + response.status);
                     }
 
-                    // Clear all tokens and storage
                     clearAllCookies();
                     clearStorage();
-
-                    // Store a flag in sessionStorage to prevent re-execution after redirect
-                    sessionStorage.setItem('logout_in_progress', 'true');
                     
-                    // Use the response URL for redirect if available, otherwise fallback to default
-                    const redirectUrl = response.url || 'https://cossdev.sunbirded.org/';
-                    window.location.replace(redirectUrl);  // Using replace instead of href
+                    console.log('Redirecting to homepage');
+                    window.location.replace('https://cossdev.sunbirded.org/');
                     
                 } catch (error) {
-                    console.error('Logout error:', error.toString());
-                    // Still try to clear everything and redirect
+                    console.error('Logout error:', error);
                     clearAllCookies();
                     clearStorage();
-                    sessionStorage.setItem('logout_in_progress', 'true');
                     window.location.replace('https://cossdev.sunbirded.org/');
                 }
             }
 
-            // Call logout only if not already in progress
-            document.addEventListener('DOMContentLoaded', function() {
-                if (sessionStorage.getItem('logout_in_progress') !== 'true') {
-                    keycloakLogout();
-                }
-            });
+            // Start logout process immediately
+            keycloakLogout();
             </script>
 
             <div id="kc-info-message">
