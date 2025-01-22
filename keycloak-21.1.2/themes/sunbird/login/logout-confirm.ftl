@@ -71,7 +71,7 @@
                     window.location.replace(logoutUrl);
                     
                 } catch (error) {
-                    // console.error('Logout error:', error);
+                    console.error('Logout error:', error);
                     // clearAllCookies();
                     //clearStorage();
                     // window.location.replace('https://cossdev.sunbirded.org/');
