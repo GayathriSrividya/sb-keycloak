@@ -64,38 +64,12 @@
 
                 try {
                     const idToken = localStorage.getItem('id_token'); // Assuming id_token is stored in localStorage
-                    const logoutUrl = 'https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout';
                     const sessionCode = '${logoutConfirm.code}';
                     console.log('Session code:', sessionCode);
                     
-                    const params = new URLSearchParams({
-                        'post_logout_redirect_uri': 'https://cossdev.sunbirded.org/',
-                        'client_id': 'portal',
-                        'session_code': sessionCode,
-                        'id_token_hint': idToken
-                    });
-
-                    console.log('Making logout request to:', logoutUrl);
-                    const response = await fetch(logoutUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: params,
-                        credentials: 'include'
-                    });
-                    
-                    console.log('Logout response status:', response.status);
-                    
-                    if (!response.ok) {
-                        throw new Error('Logout failed with status: ' + response.status);
-                    }
-
-                    clearAllCookies();
-                    clearStorage();
-                    
-                    console.log('Logout successful, redirecting');
-                    window.location.replace('https://cossdev.sunbirded.org/');
+                    const logoutUrl = `https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout?post_logout_redirect_uri=https://cossdev.sunbirded.org/&client_id=portal&session_code=${sessionCode}&id_token_hint=${idToken}`;
+                    console.log('Making logout GET request to:', logoutUrl);
+                    window.location.replace(logoutUrl);
                     
                 } catch (error) {
                     console.error('Logout error:', error);
