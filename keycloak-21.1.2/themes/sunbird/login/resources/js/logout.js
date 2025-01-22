@@ -10,6 +10,7 @@ function handleKeycloakLogout(redirectUri) {
     }
 
     const options = {};
+    console.log('options', options);
     if (redirectUri) {
         options.redirectUri = redirectUri;
     }
