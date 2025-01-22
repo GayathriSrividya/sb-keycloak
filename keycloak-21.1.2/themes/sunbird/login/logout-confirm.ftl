@@ -64,7 +64,7 @@
 
                 try {
                     const idToken = localStorage.getItem('id_token'); // Assuming id_token is stored in localStorage
-                    console.log('Session code:', sessionCode);
+                    // console.log('Session code:', sessionCode);
                     
                     const logoutUrl = `https://cossdev.sunbirded.org/auth/realms/sunbird/protocol/openid-connect/logout?post_logout_redirect_uri=https://cossdev.sunbirded.org/&client_id=portal`;
                     console.log('Making logout GET request to:', logoutUrl);
