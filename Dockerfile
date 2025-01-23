@@ -37,4 +37,4 @@ WORKDIR /opt/keycloak
 
 # Start Keycloak with proper configuration
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
-CMD ["start", "--optimized", "--import-realm", "--spi-connections-jpa-legacy-migration-strategy=update"]
+CMD ["start", "--optimized", "--import-realm", "--spi-connections-jpa-legacy-migration-strategy=update", "--spi-login-protocol-openid-connect-suppress-logout-confirmation-screen=true"]
